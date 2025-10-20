@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Tiny Steps — Confident Readers & Speakers</title>
+  <meta name="description" content="Tiny Steps — Fun phonics, grammar, and public speaking classes for kids aged 3–10. Build confident readers and speakers with playful, expert-led lessons."/>
+  <link rel="icon" href="/assets/images/logo.png" type="image/png"/>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="/style.css"/>
+  <!-- Firebase Auth (must be before main JS!) -->
+  <script type="module" src="/auth/firebase.js"></script>
+  <!-- Your main JS -->
+  <script src="/script.js" defer></script>
+</head>
+
+<body class="fade-page smooth-scroll">
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <div class="nav-wrap">
+      <a class="brand" href="/" aria-label="Tiny Steps Home">
+        <img src="/assets/images/logo.png" alt="Tiny Steps Logo" width="40" height="40">
+        <span class="brand-name">Tiny<span class="gap"></span>Steps</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="/kids/">For Kids</a>
+        <a href="/parents/">For Parents</a>
+        <a href="/teachers/">For Teachers</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="nav-cta" href="/main/book-demo/">Book Trial</a>
+        <button id="authBtn" class="nav-cta secondary" type="button" aria-live="polite">Sign in</button>
+      </div>
+    </div>
+  </header>
+
+  <div id="scroll-container">
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="home">
+      <div class="hero-bg"></div>
+      <div class="hero-content">
+        <h1>Building Confident Readers &amp; Speakers</h1>
+        <p class="slide-left">Fun, engaging phonics, grammar, and speaking lessons that help every child shine with confidence.</p>
+      </div>
+    </section>
+
+    <!-- ===== WHY SECTION ===== -->
+    <section class="why slide-in" id="why">
+      <div class="section-head">
+        <h2>Why Tiny Steps Works</h2>
+        <p>We blend fun, play, and proven methods so every child grows in confidence and skills.</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-card slide-in">
+          <img src="/assets/images/joyfullearning.jpg" alt="Joyful Learning">
+          <h3>Joyful Learning</h3>
+          <p>Children thrive in an environment filled with stories, play, and creativity.</p>
+        </div>
+        <div class="why-card slide-in">
+          <img src="/assets/images/onetoone.jpg" alt="One-to-One Guidance">
+          <h3>One-to-One Guidance</h3>
+          <p>Personal attention helps every child feel seen, supported, and celebrated.</p>
+        </div>
+        <div class="why-card slide-in">
+          <img src="/assets/images/professionalteachers.jpg" alt="Expert Teachers">
+          <h3>Professional Teachers</h3>
+          <p>Certified educators bring patience, expertise, and warmth to every class.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== KIDS COURSES ===== -->
+    <section class="courses slide-in" id="kids">
+      <div class="section-head">
+        <h2>Explore Our Programs</h2>
+        <p>Short, playful lessons that make learning joyful and meaningful.</p>
+      </div>
+      <div class="course-grid">
+        <div class="course-card" style="background-image:url('/assets/images/phonics.jpg')">
+          <div class="overlay">
+            <h3>Phonics Foundations</h3>
+            <p>Sound, blend, and read through play and songs.</p>
+            <a href="/main/courses/phonics/" class="btn small">Learn More</a>
+          </div>
+        </div>
+        <div class="course-card" style="background-image:url('/assets/images/grammar.jpg')">
+          <div class="overlay">
+            <h3>Grammar &amp; Writing</h3>
+            <p>Creative writing and grammar made fun and interactive.</p>
+            <a href="/main/courses/grammar/" class="btn small">Learn More</a>
+          </div>
+        </div>
+        <div class="course-card" style="background-image:url('/assets/images/speaking.jpg')">
+          <div class="overlay">
+            <h3>Public Speaking</h3>
+            <p>Build stage presence, confidence, and clarity in speech.</p>
+            <a href="/main/courses/public-speaking/" class="btn small">Learn More</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PARENTS FORM ===== -->
+    <section class="lead-capture slide-in" id="parents">
+      <div class="section-head"><h2>Book a Free Trial</h2></div>
+      <form class="contact-form" onsubmit="event.preventDefault(); alert('Thanks! We’ll contact you soon.');">
+        <input type="text" placeholder="Parent Name" required>
+        <input type="text" placeholder="Child’s Age" required>
+        <input type="email" placeholder="Email" required>
+        <input type="tel" placeholder="Phone Number" required>
+        <button type="submit" class="btn">Book a Free Trial</button>
+      </form>
+    </section>
+
+    <!-- ===== TEACHERS ===== -->
+    <section class="courses slide-in" id="teachers">
+      <div class="section-head">
+        <h2>For Teachers</h2>
+        <p>Join Tiny Steps as a certified educator and inspire confident learners.</p>
+      </div>
+      <div class="course-grid">
+        <div class="course-card" style="background-image:url('/assets/images/forteacher.jpg')">
+          <div class="overlay">
+            <h3>Become a Certified Phonics Trainer</h3>
+            <p>Get trained with our NSDC-aligned teaching program.</p>
+            <a href="/main/courses/teacher-training/" class="btn small">Join Now</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+      <div>© <span id="y"></span> TinySteps Learning</div>
+      <div class="footer-links">
+        <a href="/">Home</a> |
+        <a href="/kids/">For Kids</a> |
+        <a href="/parents/">For Parents</a> |
+        <a href="/teachers/">For Teachers</a>
+      </div>
+    </footer>
+  </div> <!-- /scroll-container -->
+
+  <!-- ===== WhatsApp Widget ===== -->
+  <div id="whatsapp-widget" aria-live="polite">
+    <div id="whatsapp-popup" role="dialog" aria-label="Chat prompt">
+      <button id="popup-close" aria-label="Close">&times;</button>
+      <p class="wa-greet"><strong>👋 Welcome to TinySteps!</strong><br>
+        Need help choosing a course or booking a free trial? We reply fastest on WhatsApp (9am–9pm).
+      </p>
+      <a href="https://wa.me/919618398383" target="_blank" rel="noopener" class="btn wa-btn" aria-label="Chat on WhatsApp">
+        <span class="wa-emoji" aria-hidden="true">
+          <!-- WhatsApp SVG icon -->
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <circle cx="16" cy="16" r="16" fill="#25D366"/>
+            <path d="M24.1 18.6c-.3-.1-1.7-.8-1.9-.9-.2-.1-.3-.2-.5.1-.2.3-.6.9-.8 1-.1.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.7-1.7-2-.2-.3 0-.4.1-.6.2-.2.3-.4.4-.6.1-.2 0-.4-.1-.5-.1-.1-.5-1.2-.7-1.6-.2-.4-.4-.3-.5-.3h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3 1 2.5c.1.2 1.6 2.5 3.9 3.3.5.2.9.3 1.3.4.5.1.9.1 1.2.1.4 0 1.2-.2 1.5-.7.2-.5.2-1 .1-1.1-.1-.1-.3-.2-.5-.3z" fill="#fff"/>
+          </svg>
+        </span>
+        Chat on WhatsApp
+      </a>
+    </div>
+    <button id="whatsapp-btn" aria-label="Open WhatsApp Chat">
+      <span class="wa-emoji" aria-hidden="true">
+        <!-- WhatsApp SVG icon -->
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <circle cx="16" cy="16" r="16" fill="#25D366"/>
+          <path d="M24.1 18.6c-.3-.1-1.7-.8-1.9-.9-.2-.1-.3-.2-.5.1-.2.3-.6.9-.8 1-.1.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.7-1.7-2-.2-.3 0-.4.1-.6.2-.2.3-.4.4-.6.1-.2 0-.4-.1-.5-.1-.1-.5-1.2-.7-1.6-.2-.4-.4-.3-.5-.3h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3 1 2.5c.1.2 1.6 2.5 3.9 3.3.5.2.9.3 1.3.4.5.1.9.1 1.2.1.4 0 1.2-.2 1.5-.7.2-.5.2-1 .1-1.1-.1-.1-.3-.2-.5-.3z" fill="#fff"/>
+        </svg>
+      </span>
+    </button>
+  </div>
+
+  <!-- Auth logic for home page (JS gating) -->
+  <script type="module">
+    // Firebase auth API via window.fb from /auth/firebase.js
+    const {
+      auth, onAuthStateChanged, GoogleAuthProvider,
+      signInWithPopup, signOut
+    } = window.fb;
+
+    const authBtn     = document.getElementById('authBtn');
+    const kidsLink    = document.querySelector('a[href="/kids/"]');
+    const parentsLink = document.querySelector('a[href="/parents/"]');
+
+    // Reflect sign-in state in the button
+    onAuthStateChanged(auth, (user) => {
+      const signedIn = !!user;
+      authBtn.textContent = signedIn ? "Account" : "Sign in";
+      authBtn.dataset.signedIn = signedIn;
+    });
+
+    // Auth button logic
+    authBtn?.addEventListener('click', async () => {
+      const signedIn = authBtn.dataset.signedIn === "true";
+      if (!signedIn) {
+        try {
+          await signInWithPopup(auth, new GoogleAuthProvider());
+        } catch (e) {
+          console.warn("Sign-in canceled or failed", e);
+        }
+      } else {
+        // Option: send to /account/ (if you have it), or just sign out:
+        if (confirm("Sign out of Tiny Steps?")) await signOut(auth);
+      }
+    });
+
+    // Gently gate links (actual enforcement on the page itself)
+    function protect(linkEl) {
+      if (!linkEl) return;
+      linkEl.addEventListener('click', (e) => {
+        if (!auth.currentUser) {
+          e.preventDefault();
+          alert("Please sign in to continue.");
+          authBtn?.click();
+        }
+      });
+    }
+    protect(kidsLink);
+    protect(parentsLink);
+  </script>
+</body>
+</html>
+
+
