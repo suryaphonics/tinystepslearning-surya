@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tiny Steps — Teachers Dashboard</title>
+  <meta name="description" content="Teachers dashboard for Tiny Steps: attendance, curriculum & games progress, parent materials, and monthly billing." />
+  <link rel="icon" href="/assets/images/logo.png" type="image/png"/>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Fredoka:wght@600;700&display=swap" rel="stylesheet"/>
+
+  <!-- Chart.js (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+
+  <!-- App CSS -->
+  <link rel="stylesheet" href="./teachers.css"/>
+
+  <!-- Firebase helper (optional, already in your project) -->
+  <!-- <script type="module" src="/auth/firebase.js"></script> -->
+  <script type="module" src="/auth/utils.js"></script>
+
+</head>
+<body>
+  <header class="ts-header">
+    <div class="brand">
+      <img src="/assets/images/logo.png" alt="Tiny Steps logo" class="logo" />
+      <div class="brand-text">
+        <h1>Tiny Steps</h1>
+        <p>Teachers Dashboard</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div id="teacherName" class="chip">Loading…</div>
+      <button id="signOutBtn" class="btn ghost" title="Sign out">Sign out</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Global alerts -->
+    <section id="globalAlert" class="alert hide"></section>
+
+    <!-- Top overview cards -->
+    <section class="overview-grid">
+      <article class="card stat">
+        <div class="stat-top">
+          <h3>Total Students</h3>
+          <span class="badge" id="badgeCohort">Active</span>
+        </div>
+        <div class="stat-value" id="totalStudents">0</div>
+        <p class="stat-sub" id="cohortInfo">—</p>
+      </article>
+
+      <article class="card stat">
+        <div class="stat-top">
+          <h3>Classes This Month</h3>
+        </div>
+        <div class="stat-value" id="classesThisMonth">0</div>
+        <p class="stat-sub" id="classesMonthLabel"></p>
+      </article>
+
+      
+      <article class="card stat chart">
+        <div class="stat-top">
+          <h3>Mastery Snapshot</h3>
+        </div>
+        <canvas id="masteryChart" aria-label="Overall mastery snapshot chart"></canvas>
+      </article>
+    </section>
+
+    <!-- Tabs -->
+    <section class="tabs">
+      <nav class="tablist" role="tablist" aria-label="Sections">
+        <button class="tab active" data-tab="students" role="tab" aria-selected="true">Students</button>
+        <button class="tab" data-tab="attendance" role="tab" aria-selected="false">Attendance</button>
+        <button class="tab" data-tab="curriculum" role="tab" aria-selected="false">Curriculum</button>
+        <button class="tab" data-tab="games" role="tab" aria-selected="false">Games</button>
+        <button class="tab" data-tab="materials" role="tab" aria-selected="false">Parent Materials</button>
+<button class="tab" data-tab="billing" role="tab" aria-selected="false">Classes Count</button>
+      </nav>
+
+      <!-- Students -->
+      <section class="tabpanel active" id="tab-students" role="tabpanel">
+        <div class="toolbar">
+          <div class="search">
+            <input id="studentSearch" type="search" placeholder="Search student by name or parent…" />
+            <button id="addStudentBtn" class="btn primary">+ Add Student</button>
+          </div>
+          <div class="filters">
+            <select id="filterGrade" class="select">
+              <option value="">All Grades</option>
+              <option>Nursery</option>
+              <option>LKG</option>
+              <option>UKG</option>
+              <option>Grade 1</option>
+              <option>Grade 2</option>
+              <option>Grade 3</option>
+              <option>Grade 4</option>
+            </select>
+            <select id="filterStatus" class="select">
+              <option value="">All Status</option>
+              <option value="active">Active</option>
+              <option value="paused">Paused</option>
+              <option value="left">Left</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="studentsGrid" class="grid cards"></div>
+      </section>
+
+      <!-- Attendance -->
+      <section class="tabpanel" id="tab-attendance" role="tabpanel">
+        <div class="toolbar row">
+          <div class="month-picker">
+            <button class="btn tiny" id="prevMonthBtn" aria-label="Previous month">◀</button>
+            <h4 id="monthLabel">—</h4>
+            <button class="btn tiny" id="nextMonthBtn" aria-label="Next month">▶</button>
+          </div>
+          <div class="attn-actions">
+            <select id="attnStudentSelector" class="select"></select>
+            <button class="btn" id="markTodayBtn">Mark Today Present</button>
+            <button class="btn ghost" id="clearMonthBtn">Clear Month</button>
+          </div>
+        </div>
+        <div class="calendar-wrap">
+          <div id="attnCalendar" class="calendar"></div>
+          <aside class="calendar-side card">
+            <h4>Summary</h4>
+            <p id="attnSummary">—</p>
+            <hr/>
+            <h4>Quick Notes</h4>
+            <textarea id="attnNotes" rows="6" placeholder="Behaviour, participation, instructions for parents…"></textarea>
+            <button class="btn primary" id="saveAttnNotesBtn">Save Notes</button>
+          </aside>
+        </div>
+      </section>
+
+      <!-- Curriculum -->
+      <section class="tabpanel" id="tab-curriculum" role="tabpanel">
+        <div class="toolbar">
+          <select id="currStudentSelector" class="select"></select>
+          <button id="addCurrRowBtn" class="btn">+ Add Topic</button>
+        </div>
+        <div class="table card">
+          <div class="table-head">
+            <div>Topic</div>
+            <div>Progress</div>
+            <div>Status</div>
+            <div>Focus Area</div>
+            <div>Actions</div>
+          </div>
+          <div id="currTable" class="table-body"></div>
+        </div>
+      </section>
+
+      <!-- Games -->
+      <section class="tabpanel" id="tab-games" role="tabpanel">
+        <div class="toolbar">
+          <select id="gameStudentSelector" class="select"></select>
+          <button id="addGameRowBtn" class="btn">+ Add Game</button>
+        </div>
+        <div class="table card">
+          <div class="table-head">
+            <div>Game</div>
+            <div>Level</div>
+            <div>Accuracy</div>
+            <div>Stars</div>
+            <div>Last Played</div>
+            <div>Actions</div>
+          </div>
+          <div id="gamesTable" class="table-body"></div>
+        </div>
+      </section>
+
+      <!-- Parent Materials -->
+      <section class="tabpanel" id="tab-materials" role="tabpanel">
+        <div class="materials-grid">
+          <article class="card">
+            <header class="card-head">
+              <h3>Story Books</h3>
+              <button id="addStoryBtn" class="btn">+ Add</button>
+            </header>
+            <ul id="storiesList" class="res-list"></ul>
+          </article>
+
+          <article class="card">
+            <header class="card-head">
+              <h3>Worksheets</h3>
+              <button id="addWorksheetBtn" class="btn">+ Add</button>
+            </header>
+            <ul id="worksheetsList" class="res-list"></ul>
+          </article>
+
+          <article class="card info">
+            <header class="card-head">
+              <h3>Share with Parents</h3>
+            </header>
+            <div class="share">
+              <label>Shareable Parent View Link</label>
+              <div class="share-row">
+                <input id="parentShareLink" type="url" readonly value="https://tinystepslearning.com/parents.html#student={id}"/>
+                <button class="btn ghost" id="copyShareBtn">Copy</button>
+              </div>
+              <p class="hint">This is a read-only view parents can open to see their child’s progress & billing.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Billing -->
+     <!-- Classes Count (no money) -->
+<section class="tabpanel" id="tab-billing" role="tabpanel">
+  <div class="toolbar">
+    <select id="billStudentSelector" class="select"></select>
+  </div>
+
+  <div class="billing-grid">
+    <article class="card">
+      <header class="card-head"><h3>Monthly Summary</h3></header>
+      <div class="bill-kpis">
+        <div><div class="kpi-label">Month</div><div id="billMonth" class="kpi-value">—</div></div>
+        <div><div class="kpi-label">Completed Classes</div><div id="billClasses" class="kpi-value">0</div></div>
+      </div>
+      <p class="hint">Teachers can only see attendance counts for the month.</p>
+      <button class="btn" id="downloadClassesBtn">Print / Save</button>
+    </article>
+
+    <article class="card">
+      <header class="card-head"><h3>Class Log</h3></header>
+      <div id="classLog" class="class-log"></div>
+    </article>
+  </div>
+</section>
+
+  </main>
+
+  <!-- Drawers / Dialogs -->
+  <dialog id="studentDialog" class="dialog">
+    <form method="dialog" class="dialog-card">
+      <header>
+        <h3 id="studentDialogTitle">Add Student</h3>
+      </header>
+      <div class="grid form">
+        <label>Student Name
+          <input required id="dlgStudentName" type="text" placeholder="Full name"/>
+        </label>
+        <label>Grade
+          <select id="dlgStudentGrade">
+            <option>Nursery</option><option>LKG</option><option>UKG</option>
+            <option>Grade 1</option><option>Grade 2</option><option>Grade 3</option><option>Grade 4</option>
+          </select>
+        </label>
+        <label>Parent Name
+          <input id="dlgParentName" type="text" placeholder="Parent name"/>
+        </label>
+        <label>Parent Phone
+          <input id="dlgParentPhone" type="tel" placeholder="+91 ..."/>
+        </label>
+        
+        <label>Status
+          <select id="dlgStatus">
+            <option value="active">Active</option>
+            <option value="paused">Paused</option>
+            <option value="left">Left</option>
+          </select>
+        </label>
+      </div>
+      <footer class="dialog-actions">
+        <button class="btn ghost" value="cancel">Cancel</button>
+        <button class="btn primary" id="dlgSaveStudentBtn" value="default">Save</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog id="resourceDialog" class="dialog">
+    <form method="dialog" class="dialog-card">
+      <header>
+        <h3 id="resourceDialogTitle">Add Resource</h3>
+      </header>
+      <div class="grid form">
+        <label>Title
+          <input required id="resTitle" type="text" placeholder="e.g., ‘S: Sun & Snake’ Story"/>
+        </label>
+        <label>URL (Google Drive / tinystepslearning.com)
+          <input required id="resUrl" type="url" placeholder="https://tinystepslearning.com/resources/..."/>
+        </label>
+        <label>Attach to Student (optional)
+          <select id="resStudentSelect"></select>
+        </label>
+        <label>Type
+          <select id="resType">
+            <option value="story">Story Book</option>
+            <option value="worksheet">Worksheet</option>
+          </select>
+        </label>
+      </div>
+      <footer class="dialog-actions">
+        <button class="btn ghost" value="cancel">Cancel</button>
+        <button class="btn primary" id="resSaveBtn" value="default">Save</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- App JS -->
+  <script type="module" src="./teachers.js"></script>
+</body>
+</html>

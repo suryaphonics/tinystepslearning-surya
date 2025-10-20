@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Book a Demo – TinySteps</title>
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+</head>
+<body>
+  <div id="site-nav"></div>
+  <main class="container">
+    <section class="page-hero">
+      <h1>Book a Free Demo</h1>
+      <p class="lead">We’ll reach out to confirm a time and share a class link.</p>
+      <div class="actions">
+        <a class="btn secondary" href="/main/curriculum/">Explore the curriculum</a>
+      </div>
+    </section>
+    <section>
+      <form action="https://formspree.io/f/your-id" method="POST" class="card">
+        <label>Name<br><input required name="name" type="text" /></label>
+        <label>Child's age<br><input required name="age" type="number" min="3" max="12" /></label>
+        <label>Email<br><input required name="email" type="email" /></label>
+        <label>Phone<br><input name="phone" type="tel" /></label>
+        <label>Notes<br><textarea name="notes" rows="4"></textarea></label>
+        <button class="btn" type="submit">Request demo</button>
+      </form>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="container small">© <span id="y"></span> TinySteps Learning</div></footer>
+  <script src="/assets/js/nav.js"></script>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+</html>

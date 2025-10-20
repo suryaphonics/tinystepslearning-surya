@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="auth-wait">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tiny Steps — Parent Dashboard</title>
+  <meta name="description" content="Parents dashboard to track a child's attendance, curriculum, games, dues and helpful parent resources." />
+  <link rel="icon" href="/assets/images/logo.png" type="image/png"/>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Fredoka:wght@600;700&display=swap" rel="stylesheet"/>
+
+  <!-- Chart.js (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+
+  <!-- App CSS -->
+<link rel="stylesheet" href="/parents/parents.css?v=1">
+
+  <!-- Firebase helpers (optional) -->
+  <!-- <script type="module" src="/auth/firebase.js"></script> -->
+  <script type="module" src="/auth/utils.js"></script>
+  <script type="module" src="/auth/guard.js"></script>
+
+</head>
+<body>
+  <header class="ts-header">
+  <div class="brand">
+    <img src="/assets/images/logo.png" alt="Tiny Steps logo" class="logo" />
+    <div class="brand-text">
+      <h1>Tiny Steps</h1>
+      <p>Parent Dashboard</p>
+    </div>
+  </div>
+
+  <div class="header-actions">
+    <div id="childNameChip" class="chip">Loading…</div>
+
+    <!-- Optional multi-child switcher (Step 7-ready). Safe to keep even if empty -->
+    <select id="childSwitcher" class="select" style="min-width:220px"></select>
+
+    <a class="btn" href="/parents/add-child.html">+ Add Child</a>
+    <a class="btn ghost" href="/index.html">Home</a>
+  </div>
+</header>
+
+
+  <main class="container">
+    <section id="globalAlert" class="alert hide"></section>
+
+    <!-- Overview -->
+    
+    <section class="overview-grid">
+      <article class="card stat">
+        <div class="stat-top"><h3>Attendance (This Month)</h3></div>
+        <div class="stat-value" id="ovPresent">0</div>
+        <p class="stat-sub" id="ovMonthLabel">—</p>
+      </article>
+      <article class="card stat chart">
+        <div class="stat-top"><h3>Curriculum Mastery</h3></div>
+        <canvas id="currChart" aria-label="Curriculum mastery chart"></canvas>
+      </article>
+      <article class="card stat chart">
+        <div class="stat-top"><h3>Games Accuracy</h3></div>
+        <canvas id="gamesChart" aria-label="Games accuracy chart"></canvas>
+      </article>
+      <article class="card stat">
+        <div class="stat-top">
+          <h3>Payments Due</h3>
+          <button id="downloadBtn" class="btn tiny">Download Statement</button>
+        </div>
+        <div class="stat-value" id="dueAmount">₹0</div>
+        <p class="stat-sub" id="dueNote">Based on completed classes & subscriptions</p>
+      </article>
+    </section>
+
+    <!-- Child identity & courses -->
+    <section class="card child-card">
+      <div class="left">
+        <div class="avatar" id="childInitial">A</div>
+        <div>
+          <h2 id="childName">—</h2>
+          <p class="meta"><span id="childGrade">—</span> • <span id="childStatus">—</span></p>
+        </div>
+      </div>
+      <div class="right">
+        <div class="pillset" id="enrolledCourses"></div>
+      </div>
+    </section>
+
+    <!-- Tabs -->
+ <section class="tabs">
+  <nav class="tablist" role="tablist">
+    <button class="tab active" role="tab" data-tab="attendance" aria-selected="true" aria-controls="tab-attendance">Attendance</button>
+    <button class="tab" role="tab" data-tab="curriculum" aria-selected="false" aria-controls="tab-curriculum">Curriculum</button>
+    <button class="tab" role="tab" data-tab="games" aria-selected="false" aria-controls="tab-games">Games</button>
+    <button class="tab" role="tab" data-tab="billing" aria-selected="false" aria-controls="tab-billing">Payments</button>
+    <button class="tab" role="tab" data-tab="materials" aria-selected="false" aria-controls="tab-materials">Books & Materials</button>
+    <button class="tab" role="tab" data-tab="tips" aria-selected="false" aria-controls="tab-tips">Parent Tips</button>
+  </nav>
+
+  <!-- Attendance (read-only) -->
+  <section class="tabpanel active" id="tab-attendance" role="tabpanel">
+    <div class="toolbar row">
+      <div class="month-picker">
+        <button class="btn tiny" id="prevMonth" aria-label="Previous month">◀</button>
+        <h4 id="monthLabel">—</h4>
+        <button class="btn tiny" id="nextMonth" aria-label="Next month">▶</button>
+      </div>
+      <p class="hint">Green = Attended class • Grey = No class/absent</p>
+    </div>
+    <div class="calendar" id="attnCal"></div>
+  </section>
+
+  <!-- Curriculum -->
+  <section class="tabpanel" id="tab-curriculum" role="tabpanel">
+    <article class="card">
+      <header class="card-head"><h3>Progress by Topic</h3></header>
+      <div class="table">
+        <div class="table-head">
+          <div>Topic</div><div>Progress</div><div>Status</div><div>Focus Area</div>
+        </div>
+        <div class="table-body" id="currTable"></div>
+      </div>
+    </article>
+  </section>
+
+  <!-- Games -->
+  <section class="tabpanel" id="tab-games" role="tabpanel">
+    <article class="card">
+      <header class="card-head"><h3>Games Progress</h3></header>
+      <div class="table games">
+        <div class="table-head">
+          <div>Game</div><div>Level</div><div>Accuracy</div><div>Stars</div><div>Last Played</div>
+        </div>
+        <div class="table-body" id="gamesTable"></div>
+      </div>
+    </article>
+    <article class="card info">
+      <h4>Active Game Subscriptions</h4>
+      <div id="subsRow" class="pillset"></div>
+    </article>
+  </section>
+
+  <!-- Billing -->
+  <section class="tabpanel" id="tab-billing" role="tabpanel">
+    <div class="billing-grid">
+      <article class="card">
+        <header class="card-head"><h3>Monthly Summary</h3></header>
+        <div class="bill-kpis">
+          <div><div class="kpi-label">Month</div><div id="bMonth" class="kpi-value">—</div></div>
+          <div><div class="kpi-label">Completed Classes</div><div id="bClasses" class="kpi-value">0</div></div>
+          <div><div class="kpi-label">Rate</div><div id="bRate" class="kpi-value">₹350</div></div>
+          <div><div class="kpi-label">Subscriptions</div><div id="bSubs" class="kpi-value">₹0</div></div>
+          <div><div class="kpi-label">Amount Due</div><div id="bAmount" class="kpi-value emphasis">₹0</div></div>
+        </div>
+        <p class="hint">Classes are billed only when completed. Subscriptions are monthly and optional.</p>
+        <button class="btn" id="printBtn">Print / Save PDF</button>
+      </article>
+      <article class="card">
+        <header class="card-head"><h3>Class Log</h3></header>
+        <div id="classLog" class="class-log"></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Materials -->
+  <section class="tabpanel" id="tab-materials" role="tabpanel">
+    <div class="materials-grid">
+      <article class="card">
+        <header class="card-head"><h3>Story Books</h3></header>
+        <ul id="storyList" class="res-list"></ul>
+      </article>
+      <article class="card">
+        <header class="card-head"><h3>Worksheets</h3></header>
+        <ul id="wsList" class="res-list"></ul>
+      </article>
+    </div>
+  </section>
+
+  <!-- Tips -->
+  <section class="tabpanel" id="tab-tips" role="tabpanel">
+    <article class="card">
+      <header class="card-head"><h3>Parent Tips: Child Psychology & Adaptive Learning</h3></header>
+      <ul class="tips">
+        <li><strong>Short bursts beat long marathons:</strong> 10–12 minute focused practice with a fun game reward maintains attention for ages 4–8.</li>
+        <li><strong>Interleave skills:</strong> Mix letter-sound, blending, and a quick story—this builds stronger retention than single-skill drills.</li>
+        <li><strong>Immediate, specific praise:</strong> “Great /s/ sound in <em>sun</em>!” is far more effective than “Good job.”</li>
+        <li><strong>Visual anchors:</strong> Use the same icons/gestures Tiny Steps uses (e.g., Magic-E, Floss rule) to reinforce transfer from class to home.</li>
+        <li><strong>Choice increases ownership:</strong> Let your child pick the first worksheet or game. Autonomy boosts engagement.</li>
+        <li><strong>Sleep & recall:</strong> A quick 2-minute review at bedtime improves next-day performance.</li>
+      </ul>
+    </article>
+  </section>
+</section>
+
+
+
+  </main>
+
+  <!-- Print styles -->
+  <style>
+    @media print{
+      .ts-header, .tablist, .toolbar, #downloadBtn{ display:none !important }
+      .billing-grid{ grid-template-columns:1fr !important }
+      .card{ box-shadow:none !important; border:1px solid #ddd !important }
+      body{ background:#fff }
+    }
+  </style>
+
+<script type="module" src="/parents/parents.js?v=1"></script>
+</body>
+</html>

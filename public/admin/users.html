@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>User Management — Tiny Steps Admin</title>
+  <link rel="icon" href="/assets/images/logo.png" type="image/png"/>
+  <link rel="stylesheet" href="/admin/admin.css?v=1"/>
+  <script type="module" src="/auth/utils.js"></script>
+  <script type="module" src="/auth/guard.js"></script>
+  <script type="module" src="/admin/users.js?v=1"></script>
+</head>
+<body>
+  <header class="ts-header">
+    <div class="brand">
+      <img src="/assets/images/logo.png" class="logo" />
+      <div class="brand-text">
+        <h1>Tiny Steps</h1>
+        <p>Admin: User Management</p>
+      </div>
+    </div>
+    <nav>
+      <a class="btn ghost" href="/admin/index.html">Dashboard</a>
+      <a class="btn ghost" href="/admin/users.html">Users</a>
+      <a class="btn ghost" href="/admin/mapping.html">Mapping</a>
+      <a class="btn ghost" href="/admin/billing.html">Billing</a>
+    </nav>
+  </header>
+  <main class="container">
+    <section>
+      <h2>User Management</h2>
+      <div class="row" style="gap:14px;margin-bottom:10px;">
+        <input type="search" id="userSearch" class="input" placeholder="Search users by name, email, or role…" style="max-width:340px;">
+        <button id="addUserBtn" class="btn tiny">+ Add User</button>
+      </div>
+      <div id="userTable" class="user-table"></div>
+      <!-- Modal for add/edit user -->
+      <dialog id="userDialog">
+        <form id="userForm" method="dialog" class="dialog-form">
+          <h3 id="userDialogTitle">Add User</h3>
+          <input type="hidden" id="userUid" />
+          <div>
+            <label>Name</label>
+            <input id="userName" required autocomplete="off" />
+          </div>
+          <div>
+            <label>Email</label>
+            <input id="userEmail" type="email" required autocomplete="off" />
+          </div>
+          <div>
+            <label>Role</label>
+            <select id="userRole" required>
+              <option value="parent">Parent</option>
+              <option value="teacher">Teacher</option>
+              <option value="rm">Relationship Manager</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:12px;margin-top:16px;">
+            <button class="btn" id="saveUserBtn" type="submit">Save</button>
+            <button class="btn ghost" type="button" onclick="this.closest('dialog').close()">Cancel</button>
+          </div>
+        </form>
+      </dialog>
+    </section>
+  </main>
+</body>
+</html>

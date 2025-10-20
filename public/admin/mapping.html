@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Mapping — Tiny Steps Admin</title>
+  <link rel="icon" href="/assets/images/logo.png" type="image/png"/>
+  <link rel="stylesheet" href="/admin/admin.css?v=1"/>
+  <script type="module" src="/auth/utils.js"></script>
+  <script type="module" src="/auth/guard.js"></script>
+  <script type="module" src="/admin/mapping.js?v=1"></script>
+</head>
+<body>
+  <header class="ts-header">
+    <div class="brand">
+      <img src="/assets/images/logo.png" class="logo" />
+      <div class="brand-text">
+        <h1>Tiny Steps</h1>
+        <p>Admin: Mapping</p>
+      </div>
+    </div>
+    <nav>
+      <a class="btn ghost" href="/admin/index.html">Dashboard</a>
+      <a class="btn ghost" href="/admin/users.html">Users</a>
+      <a class="btn ghost" href="/admin/mapping.html">Mapping</a>
+      <a class="btn ghost" href="/admin/billing.html">Billing</a>
+    </nav>
+  </header>
+  <main class="container">
+    <section>
+      <h2>Student–Teacher–Parent Mapping</h2>
+      <div style="margin-bottom:18px;">
+        <select id="teacherSelector" class="input"></select>
+        <button class="btn tiny" id="showTeacherStudents">Show Students</button>
+      </div>
+      <div id="mappingTable"></div>
+    </section>
+  </main>
+  <!-- ...existing header/nav... -->
+<main class="container">
+  <section>
+    <h2>Student–User Mapping</h2>
+    <div style="display:flex;gap:24px;flex-wrap:wrap">
+      <div>
+        <label>Teacher</label>
+        <select id="teacherSelector" class="input"></select>
+        <button class="btn tiny" id="showTeacherStudents">Show</button>
+      </div>
+      <div>
+        <label>Parent</label>
+        <select id="parentSelector" class="input"></select>
+        <button class="btn tiny" id="showParentStudents">Show</button>
+      </div>
+      <div>
+        <label>RM</label>
+        <select id="rmSelector" class="input"></select>
+        <button class="btn tiny" id="showRmStudents">Show</button>
+      </div>
+    </div>
+    <div id="mappingTable" style="margin-top:26px"></div>
+  </section>
+</main>
+
+</body>
+</html>

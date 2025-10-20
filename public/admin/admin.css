@@ -1,0 +1,52 @@
+:root {
+  --accent: #0ea5e9;
+  --bg: #f7f9ff;
+  --header-bg: #fff4e6;
+  --card-bg: #fff;
+  --card-shadow: 0 8px 24px rgba(0,20,60,0.09);
+  --radius: 18px;
+}
+body {
+  font-family: 'Inter', Arial, sans-serif;
+  background: #fff7e6;
+  color: #101321;
+  margin: 0;
+  min-height: 100vh;
+}
+.ts-header {
+  display: flex;
+  align-items: center;
+  background: #ffe7ba;
+  padding: 18px 32px;
+  border-bottom: 1px solid #f4e3c3;
+  gap: 32px;
+}
+.brand {
+  display: flex; align-items: center; gap: 18px;
+}
+.brand-text h1 { font-size: 28px; margin: 0; }
+nav { margin-left: auto; display:flex; gap:12px;}
+.btn, .btn.tiny {
+  background: linear-gradient(90deg,#ffd93d,#ff6a88); border: none;
+  padding: 7px 16px; border-radius: 14px; font-weight: 700;
+  cursor: pointer; font-size: 15px; transition: box-shadow .18s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.btn.ghost { background: #fff0; border: 1px solid #ffda92; color: #945c08;}
+.btn.danger { background: #ffe0e0; color: #b81d1d; border: 1px solid #f6a2a2; }
+.pill { background: #fff3cd; padding: 3px 10px; border-radius: 9px; font-size: 14px;}
+.pill.role-pill.teacher { background:#e0ecff;color:#1339a8;}
+.pill.role-pill.parent { background:#fffbe0;color:#a89a13;}
+.pill.role-pill.admin { background:#ffdedf;color:#9b2b42;}
+.pill.role-pill.rm { background:#e5ffe7;color:#149b2b;}
+.input, select { border:1px solid #f4e3c3; border-radius:7px; padding:8px; font-size:16px;}
+input[type="search"] {width:100%;max-width:320px;}
+.user-table .table-head, .user-table .table-row {
+  display: grid; grid-template-columns:1.5fr 2fr 1fr 1fr; gap:8px; align-items:center;
+}
+.dialog-form label {display:block;font-weight:600;margin:5px 0 2px;}
+.dialog-form input, .dialog-form select {width:100%;margin-bottom:8px;}
+@media (max-width: 700px) {
+  .ts-header { flex-direction: column; align-items:flex-start; gap:16px; }
+  nav { margin:0;}
+}

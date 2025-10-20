@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Admin Dashboard — Tiny Steps</title>
+  <link rel="icon" href="/assets/images/logo.png" type="image/png"/>
+  <link rel="stylesheet" href="/admin/admin.css?v=1"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script type="module" src="/auth/utils.js"></script>
+  <script type="module" src="/auth/guard.js"></script>
+  <script type="module" src="/admin/admin.js?v=1"></script>
+</head>
+<body>
+  <header class="ts-header">
+    <div class="brand">
+      <img src="/assets/images/logo.png" class="logo" />
+      <div class="brand-text">
+        <h1>Tiny Steps</h1>
+        <p>Admin Dashboard</p>
+      </div>
+    </div>
+    <nav>
+      <a class="btn ghost" href="/admin/index.html">Dashboard</a>
+      <a class="btn ghost" href="/admin/users.html">Users</a>
+      <a class="btn ghost" href="/admin/mapping.html">Mapping</a>
+      <a class="btn ghost" href="/admin/billing.html">Billing</a>
+    </nav>
+  </header>
+  <main class="container">
+    <section>
+      <h2>Key Metrics</h2>
+      <div class="overview-grid">
+        <article class="card stat">
+          <div class="stat-top"><h3>Total Students</h3></div>
+          <div class="stat-value" id="totalStudents">—</div>
+        </article>
+        <article class="card stat">
+          <div class="stat-top"><h3>Total Parents</h3></div>
+          <div class="stat-value" id="totalParents">—</div>
+        </article>
+        <article class="card stat">
+          <div class="stat-top"><h3>Total Teachers</h3></div>
+          <div class="stat-value" id="totalTeachers">—</div>
+        </article>
+        <article class="card stat">
+          <div class="stat-top"><h3>Total RMs</h3></div>
+          <div class="stat-value" id="totalRms">—</div>
+        </article>
+      </div>
+      <div style="margin-top:32px;">
+        <canvas id="studentGrowthChart" height="100"></canvas>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

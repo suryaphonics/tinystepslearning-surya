@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="auth-wait">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Billing — Tiny Steps</title>
+  <link rel="icon" href="/assets/images/logo.png" type="image/png"/>
+  <link rel="stylesheet" href="/admin/admin.css?v=1" />
+  <script type="module" src="/auth/utils.js"></script>
+  <script type="module" src="/auth/guard.js"></script>
+</head>
+<body>
+  <header class="ts-header">
+    <div class="brand">
+      <img src="/assets/images/logo.png" class="logo" />
+      <div class="brand-text">
+        <h1>Tiny Steps</h1>
+        <p>Admin Billing</p>
+      </div>
+    </div>
+    <nav style="margin-left:auto;">
+      <a class="btn ghost" href="/admin/index.html">Admin Home</a>
+      <a class="btn ghost" href="/index.html">Home</a>
+    </nav>
+  </header>
+  <main class="container">
+    <section id="globalAlert" class="alert hide"></section>
+    <section>
+      <h2>All Payments & Billing</h2>
+      <div>
+        <label>Filter by Month:
+          <input type="month" id="filterMonth" />
+        </label>
+        <button id="refreshBtn" class="btn tiny">Refresh</button>
+      </div>
+      <div id="billingTableWrap"></div>
+    </section>
+  </main>
+  <script type="module" src="/admin/billing.js?v=1"></script>
+</body>
+</html>
