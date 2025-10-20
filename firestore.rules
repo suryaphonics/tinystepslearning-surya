@@ -1,0 +1,74 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // --- USERS: Only self can read, admin can write (e.g., role assignment) ---
+    match /users/{uid} {
+      allow read: if isSignedIn() && request.auth.uid == uid;
+      allow write: if isAdmin();
+    }
+
+    // --- STUDENTS: Mapping logic & field-level controls ---
+    match /students/{studentId} {
+      // Anyone mapped to this student can read
+      allow read: if isAdmin()
+                || isTeacherOf(studentId)
+                || isRMOf(studentId)
+                || isParentOf(studentId);
+
+      // Only admin can write all fields (including teacherUids/parentUids/rmUids)
+      allow write: if isAdmin();
+
+      // Teachers can update "progress" fields, but *not* mapping arrays
+      allow update: if isTeacherOf(studentId)
+                    && !anyMappingFieldChanged();
+
+      // Helpers for field-level protection
+      function mappingFields() {
+        return ['teacherUids', 'parentUids', 'rmUids'];
+      }
+      function anyMappingFieldChanged() {
+        // Check if any mapping field is changed in this update
+        return mappingFields().hasAny(field =>
+          (field in request.resource.data)
+          && (resource.data[field] != request.resource.data[field])
+        );
+      }
+    }
+
+    // --- BILLING: Only mapped users can read, only admin can write ---
+    match /billing/{studentId} {
+      allow read: if isAdmin()
+                || isTeacherOf(studentId)
+                || isRMOf(studentId)
+                || isParentOf(studentId);
+      allow write: if isAdmin();
+    }
+
+    // --- (OPTIONAL) RESOURCES: Only mapped users can read, only admin can write ---
+    match /resources/{resId} {
+      allow read: if isAdmin() || isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // --- Helpers ---
+    function isSignedIn() { return request.auth != null; }
+    function hasRole(role) { return isSignedIn() && request.auth.token.role == role; }
+    function isAdmin()    { return hasRole('admin'); }
+    function isTeacherOf(studentId) {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/students/$(studentId))
+        && request.auth.uid in get(/databases/$(database)/documents/students/$(studentId)).data.teacherUids;
+    }
+    function isRMOf(studentId) {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/students/$(studentId))
+        && request.auth.uid in get(/databases/$(database)/documents/students/$(studentId)).data.rmUids;
+    }
+    function isParentOf(studentId) {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/students/$(studentId))
+        && request.auth.uid in get(/databases/$(database)/documents/students/$(studentId)).data.parentUids;
+    }
+  }
+}
