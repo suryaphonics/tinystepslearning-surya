@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+  />
+  <title>Tiny Steps — Treasure Hunt (Mobile Optimized)</title>
+  <meta name="description" content="Phonics Treasure Hunt — mobile-friendly, fullscreen, landscape-first." />
+  <meta name="color-scheme" content="light only" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:," />
+</head>
+<body>
+
+  <!-- ================= 🌴 Splash Loading Screen ================= -->
+  <div id="loadingScreen" aria-hidden="true">
+    <div class="loaderBox">
+      <div class="loader" aria-hidden="true"></div>
+      <p>🪙 Loading your adventure...</p>
+    </div>
+  </div>
+
+  <!-- ================= 🔁 Rotate Notice (shown on portrait phones) ================= -->
+  <div id="rotateNotice" aria-live="polite" aria-atomic="true">
+    <div class="card">
+      <div class="emoji">🔁</div>
+      <div class="msg">Please rotate your device to <b>landscape</b> for the best view.</div>
+    </div>
+  </div>
+
+  <!-- ================= 🧭 HUD (Top Info Bar) ================= -->
+  <div id="hud" role="region" aria-label="Score and Island">
+    <div id="islandName">Island 1: SATP</div>
+    <div id="scoreBoard">
+      <span>⭐ Stars: <span id="stars">0</span></span>
+      <span class="sep">|</span>
+      <span>💰 Treasures: <span id="treasures">0</span></span>
+    </div>
+  </div>
+
+  <!-- ================= 🗣️ Question Label ================= -->
+  <div id="questionText" class="glowText hidden" aria-live="polite">Find the sound</div>
+
+  <!-- ================= 🎬 Video Layers ================= -->
+  <div id="videoContainer" aria-hidden="true">
+    <!-- 🌅 Intro -->
+    <video id="introVideo" playsinline muted preload="auto"></video>
+
+    <!-- ✅ Feedback Clips -->
+    <video id="videoRight" playsinline muted preload="auto"></video>
+    <video id="videoWrong" playsinline muted preload="auto"></video>
+  </div>
+
+  <!-- ================= 🏝️ Gameplay Background ================= -->
+  <img
+    id="gameplayBG"
+    src="/kids/games/phonics/Treasure-Hunt/assets/gameplay/gameplay.png"
+    alt="Treasure cave background"
+  />
+
+  <!-- ================= 💰 Treasure Chest Area ================= -->
+  <div id="chestBar" role="group" aria-label="Answer choices">
+    <button id="btn0" class="chest" aria-label="Choice 1">
+      <div class="pic"><img id="img0" alt="" draggable="false" /></div>
+    </button>
+    <button id="btn1" class="chest" aria-label="Choice 2">
+      <div class="pic"><img id="img1" alt="" draggable="false" /></div>
+    </button>
+    <button id="btn2" class="chest" aria-label="Choice 3">
+      <div class="pic"><img id="img2" alt="" draggable="false" /></div>
+    </button>
+  </div>
+
+  <!-- ================= ✨ Floating Banner ================= -->
+  <div id="banner" aria-live="polite"></div>
+
+  <!-- ================= 🎉 Confetti Canvas ================= -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- ================= 🏝️ Fullscreen Button (kept as backup) ================= -->
+  <button id="fullscreenBtn" class="fullscreenBtn" type="button" aria-label="Toggle fullscreen">🏝️ Fullscreen</button>
+
+  <!-- ================ Level Complete Overlay ================= -->
+  <div class="overlay" id="levelOverlay" aria-modal="true" role="dialog">
+    <div class="panel">
+      <h2>⭐ Island Complete!</h2>
+      <p>You mastered Level <span id="levelCompleteNum">1</span>.</p>
+      <div class="actions">
+        <button id="btnNextLevel" class="btn">Next Island ➜</button>
+        <button id="btnReplayLevel" class="btn ghost">Replay Island</button>
+        <button id="btnHub" class="btn ghost">⬅ Back to Hub</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ⚙️ JS ================= -->
+  <script src="script.js"></script>
+
+  <!-- ================= 💅 Inline Loader Styles ================= -->
+  <style>
+    #loadingScreen {
+      position: fixed; inset: 0;
+      background: linear-gradient(180deg, #001d3d, #000814);
+      color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-family: "Fredoka One", system-ui, sans-serif; font-size: clamp(16px, 2.8vw, 22px);
+      z-index: 999999; transition: opacity 1s ease;
+    }
+    #loadingScreen.fadeOut { opacity: 0; pointer-events: none; }
+    .loaderBox { text-align: center; }
+    .loader { width: 70px; height: 70px; border: 6px solid #ffffff30; border-top-color: #ffcf57; border-radius: 50%; animation: spin 1.2s linear infinite; margin: 10px auto 15px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+
+  <noscript>
+    <p style="padding:1rem;text-align:center;font-family:Inter,system-ui">This game needs JavaScript enabled.</p>
+  </noscript>
+</body>
+</html>

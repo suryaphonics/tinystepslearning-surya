@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>TinySteps — Sound → Picture Match</title>
+  <meta name="color-scheme" content="light dark">
+
+  <!-- ✅ Favicon uses your existing logo -->
+  <link rel="icon" href="/assets/images/logo.png" type="image/png">
+  <!-- Optional extras (only if you add these files later) -->
+  <!-- <link rel="apple-touch-icon" href="/assets/images/logo.png"> -->
+  <!-- <meta name="theme-color" content="#0b1028"> -->
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <canvas id="confetti"></canvas>
+
+  <!-- Celebration overlay -->
+  <div id="cele" class="celebrate" aria-live="assertive">
+    <div class="cele-card">
+      <div class="cele-title">Set Complete! 🎉</div>
+      <div class="cele-sub" id="celeSub">Amazing work!</div>
+      <button class="cele-btn" id="celeNext">Continue</button>
+    </div>
+  </div>
+
+  <div class="wrapper">
+    <div class="card" id="card">
+      <div class="inner">
+        <header>
+          <button class="back" id="backBtn">← Back to hub</button>
+          <div class="title">🔊 Match the Sound!</div>
+          <div class="setNav" id="setNav" aria-label="Sets"></div>
+        </header>
+
+        <div class="hud">
+          <div class="badges">
+            <span class="pill" id="setName">Set 1: s a t i p n</span>
+            <span class="pill" id="lettersLeft"></span>
+          </div>
+          <div class="stats">
+            <div class="stat"><span class="fire">🔥</span> <span id="streak">0</span></div>
+            <div class="stat"><span class="coin">🪙</span> <span id="coins">0</span></div>
+          </div>
+        </div>
+
+        <div class="bar" aria-hidden="true"><div id="barFill"></div></div>
+
+        <div class="controls">
+          <button class="big" id="btnPlay">▶️ Listen</button>
+          <button class="big" id="btnHint">💡 Hint</button>
+          <button class="big danger" id="btnReset">Reset Progress</button>
+        </div>
+
+        <section class="grid" id="grid" role="group" aria-label="Choices"></section>
+
+        <div class="foot" id="status" aria-live="polite">Listen and tap the matching picture.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mini Congratulations Popup -->
+  <div id="miniCongrats" class="mini-congrats">🎉 Congratulations!</div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

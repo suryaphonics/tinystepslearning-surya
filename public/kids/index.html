@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Kids Zone – TinySteps</title>
+
+  <!-- ✅ Favicon -->
+  <link rel="icon" href="../assets/images/logo.png" type="image/png">
+
+  <!-- ✅ Styles -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- ✅ Speed up auth bootstrap -->
+  <link rel="modulepreload" href="/auth/firebase.js">
+
+  <!-- ✅ Prevent flash while auth guard runs -->
+  <style>
+    html.auth-wait, html.auth-wait body { visibility: hidden; }
+  </style>
+</head>
+
+<body>
+  <!-- Add the class BEFORE loading the guard -->
+  <script>document.documentElement.classList.add('auth-wait');</script>
+  <script type="module" src="/auth/guard.js"></script>
+  <!-- Safety: if guard fails to unhide, reveal after 2.5s to avoid a stuck blank page -->
+  <script type="module">
+    setTimeout(()=>document.documentElement.classList.remove('auth-wait'), 2500);
+  </script>
+
+  <!-- 🌌 GALAXY BACKGROUND LAYERS -->
+  <div class="nebula"></div>
+  <div class="stars"></div>
+  <div class="glow-star"></div>
+  <div class="glow-star"></div>
+  <div class="glow-star"></div>
+  <div class="glow-star"></div>
+  <div class="glow-star"></div>
+  <div class="shooting-star"></div>
+  <div class="shooting-star"></div>
+  <div class="shooting-star"></div>
+  <div class="shooting-star"></div>
+  <div class="shooting-star"></div>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <div class="nav-wrap">
+      <a class="brand" href="/" aria-label="Tiny Steps Home">
+        <img src="../assets/images/logo.png" alt="Tiny Steps Logo">
+        <span class="brand-name">Tiny<span class="gap"></span>Steps</span>
+      </a>
+
+      <!-- ✅ Account badge lives inside .nav-wrap -->
+      <div id="acct" class="acct" hidden>
+        <button id="acctBtn" class="acct-btn" aria-haspopup="menu" aria-expanded="false">
+          <img id="acctPic" alt="" class="acct-pic" />
+          <span id="acctInit" class="acct-init" aria-hidden="true"></span>
+        </button>
+        <div id="acctMenu" class="acct-menu" role="menu">
+          <div class="acct-row" id="acctName" role="menuitem" tabindex="-1"></div>
+          <a class="acct-row" href="/auth/index.html?redirect=/kids/" role="menuitem" tabindex="-1">Switch account</a>
+          <button class="acct-row" id="acctSignOut" role="menuitem" tabindex="-1">Sign out</button>
+        </div>
+      </div>
+
+      <a class="nav-cta" href="/main/book-demo/">Book a Free Trial</a>
+    </div>
+  </header>
+
+  <!-- ===== HERO SECTION ===== -->
+  <main>
+    <section class="kids-hero" aria-label="Welcome">
+      <h1>Welcome to the Kids Zone 🚀</h1>
+      <p class="lead">Your special place for fun, games & learning adventures!</p>
+    </section>
+
+    <!-- ===== PORTALS ===== -->
+    <section class="portals" aria-label="Choose your portal">
+      <a class="portal games" href="/kids/games/" aria-label="Play Games">
+        <span class="ring"></span>
+        <div class="core"><span class="icon">🎮</span></div>
+        <span class="label">Play Games</span>
+      </a>
+
+      <a class="portal sheets" href="/kids/worksheets/" aria-label="Worksheets">
+        <span class="ring"></span>
+        <div class="core"><span class="icon">📝</span></div>
+        <span class="label">Worksheets</span>
+      </a>
+
+      <a class="portal classroom" href="/kids/join-class/" aria-label="Join Your Class">
+        <span class="ring"></span>
+        <div class="core"><span class="icon">🎓</span></div>
+        <span class="label">Join Class</span>
+      </a>
+    </section>
+  </main>
+
+  <!-- ===== ROCKET & MESSAGE (Bottom-Right Corner) ===== -->
+  <div class="mascot-wrap right-corner">
+    <button class="mascot" id="mascot" title="Let’s play!" aria-label="Mascot">🚀</button>
+    <div class="speech" id="speech">
+      👏 Great job showing up today! <br>
+      © 2025 TinySteps Learning
+    </div>
+  </div>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script src="script.js" defer></script>
+
+  <!-- Nebula Parallax Effect -->
+  <script>
+    window.addEventListener("scroll", () => {
+      const scrollY = window.scrollY;
+      const nebula = document.querySelector(".nebula");
+      if (nebula) nebula.style.transform = `translateY(${scrollY * 0.1}px) scale(1.05)`;
+    });
+  </script>
+
+  <!-- ✅ Account badge logic -->
+  <script type="module">
+    import "/auth/firebase.js";
+
+    const acct = document.querySelector("#acct");
+    const btn  = document.querySelector("#acctBtn");
+    const menu = document.querySelector("#acctMenu");
+    const pic  = document.querySelector("#acctPic");
+    const init = document.querySelector("#acctInit");
+    const name = document.querySelector("#acctName");
+    const out  = document.querySelector("#acctSignOut");
+
+    // Show user info if signed in
+    window.fb.onAuthStateChanged(window.fb.auth, (user) => {
+      if (!user) { acct.hidden = true; return; }
+      const display = user.displayName || user.email || "Account";
+      name.textContent = display;
+
+      // avatar or initials
+      if (user.photoURL) {
+        pic.src = user.photoURL; pic.style.display = "block"; init.style.display = "none";
+      } else {
+        const letter = (display[0] || "A").toUpperCase();
+        init.textContent = letter; init.style.display = "grid"; pic.style.display = "none";
+      }
+      acct.hidden = false;
+    });
+
+    // Toggle menu
+    btn?.addEventListener("click", () => {
+      const open = acct.getAttribute("data-open")==="1";
+      acct.setAttribute("data-open", open ? "0":"1");
+      btn.setAttribute("aria-expanded", String(!open));
+    });
+    document.addEventListener("click", (e)=>{
+      if (!acct.contains(e.target)){ acct.setAttribute("data-open","0"); btn.setAttribute("aria-expanded","false"); }
+    });
+
+    // Sign out
+    out?.addEventListener("click", async ()=>{
+      await window.fb.signOut(window.fb.auth);
+      location.replace("/auth/index.html?redirect=/kids/");
+    });
+  </script>
+
+</body>
+</html>

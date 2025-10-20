@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Galaxy Phonics Balloon Pop</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Dummy favicon to prevent 404 errors -->
+  <link rel="icon" href="data:,">
+</head>
+<body>
+
+  <!-- Sky + Star backgrounds -->
+  <canvas id="skyCanvas" class="sky-background"></canvas>
+  <canvas id="starCanvas" class="star-background"></canvas>
+
+  <!-- Balloon game area -->
+  <div class="game-container" id="gameContainer"></div>
+
+  <!-- Vertical Game Title -->
+  <div class="game-title-vertical">Phonics Balloon Pop</div>
+
+  <!-- HUD Controls (top-right) -->
+  <div class="hud">
+  <div class="pill">⏱ <span id="timer">00:00</span></div>
+  <div class="pill">🌟 <span id="starsHUD">0</span></div>
+  <div class="pill">💰 <span id="coinsHUD">0</span></div>
+  <div class="pill">🏆 Best <span id="bestHUD">0</span></div>
+  <div class="pill">🎯 Level <span id="levelNum">1</span></div>
+  <button id="btnPause" class="btn">⏸ Pause</button>
+  <button id="btnFullscreen" class="btn">⛶ Fullscreen</button>
+</div>
+
+
+
+  <!-- Back to Hub -->
+  <button id="btnHubMain" class="btn back-to-hub">⬅ Back to Hub</button>
+
+  <!-- Listen button -->
+  <button class="listen-btn" id="btnListen" aria-label="Listen to letter sound">🔈 Listen</button>
+
+  <!-- Letter target info -->
+  <div class="target-info" id="targetInfo">
+    Letter: <span id="targetLetter">?</span>
+  </div>
+
+  <!-- Feedback Message -->
+  <div class="message" id="message">Tap Play to start</div>
+
+  <!-- Center Letter animation -->
+  <div class="letter-display" id="letterDisplay"></div>
+
+  <!-- Start Overlay -->
+  <div class="overlay" id="startOverlay">
+    <div class="panel">
+      <p>Pop the balloons with the matching letter sound!</p>
+      <div class="level-select" id="levelSelect"></div>
+      <div class="actions">
+        <button id="btnPlay" class="btn">Play</button>
+        <button id="btnHow" class="btn ghost">How to Play</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Level Complete Overlay -->
+  <div class="overlay" id="levelOverlay">
+    <div class="panel">
+      <h2>⭐ Level Complete!</h2>
+      <p>You mastered Level <span id="levelCompleteNum">1</span>.</p>
+      <div class="scorebox">Score so far: <span id="scoreSoFar">0</span></div>
+      <div class="scorebox">⏱ Time taken: <span id="levelTime">00:00</span></div>
+      <div class="actions">
+        <button id="btnNextLevel" class="btn secondary">Next Level ➜</button>
+        <button id="btnReplayLevel" class="btn ghost">Replay Level</button>
+        <button id="btnHub1" class="btn ghost">⬅ Back to Hub</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Over Overlay -->
+  <div class="overlay" id="gameOverOverlay">
+    <div class="panel">
+      <h2 id="gameOverTitle">Game Over</h2>
+      <p id="gameOverMsg">Nice try! Practice makes perfect ⭐</p>
+      <div class="scorebox">
+        Your score: <span id="finalScore">0</span>
+      </div>
+      <div class="actions">
+        <button id="btnRestart" class="btn">Restart</button>
+        <button id="btnHub2" class="btn ghost">⬅ Back to Hub</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Celebration -->
+  <div class="celebrate" id="celebrate">
+    <div class="burst" id="celebrateText">🎉 Great Job! 🎉</div>
+  </div>
+
+  <!-- Debug -->
+  <div class="debug" id="debug"></div>
+  
+  <!-- Countdown Overlay -->
+  <div id="countdownOverlay" class="countdown-overlay">
+    <div id="countdownText" class="countdown-text"></div>
+  </div>
+
+  <!-- Game Script -->
+  <script src="script.js"></script>
+  <canvas id="confettiCanvas"></canvas>
+
+</body>
+</html>

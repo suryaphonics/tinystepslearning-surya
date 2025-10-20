@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kids Zone — TinySteps</title>
+  <meta name="description" content="Fun phonics, grammar, and speaking games in the Kids Zone at TinySteps!" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAV -->
+  <div class="nav">
+    <div class="brand">
+      <img src="../../assets/images/logo.png" alt="TinySteps Logo">
+      <strong>TinySteps</strong>
+    </div>
+    <div class="menu">
+      <a href="/index.html">Home</a>
+      <a href="/kids/">For Kids</a>
+      <a class="cta" href="/index.html#trial">Book Trial</a>
+    </div>
+  </div>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="title">
+      <div>
+        <h1 id="title" class="kids-zone-title">🚀 Kids Zone</h1>
+        <p class="subtitle">Choose your fun learning zone below!</p>
+      </div>
+    </section>
+
+    <!-- GAME GRID -->
+    <section aria-label="Game list">
+      <div id="grid" class="grid">
+
+        <a href="/kids/games/phonics/" class="card phonics" data-title="🔤 Phonics Zone" aria-label="Phonics Zone"></a>
+
+        <a href="/kids/games/grammar/" class="card grammar" data-title="📚 Grammar Zone" aria-label="Grammar Zone"></a>
+
+        <a href="/kids/games/speaking/" class="card speaking" data-title="🎤 Speaking Zone" aria-label="Speaking Zone"></a>
+
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Simple click animation feedback for mobile
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', () => {
+        card.classList.add('clicked');
+        setTimeout(() => card.classList.remove('clicked'), 400);
+      });
+    });
+  </script>
+</body>
+</html>

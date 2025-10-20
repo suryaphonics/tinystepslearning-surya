@@ -1,0 +1,230 @@
+:root {
+  --sunray-dark: #ff9800;
+  --sunray: #ffb300;
+  --sunray-light: #ffe066;
+  --ink: #fff;
+  --muted: #e7ebff;
+  --ring: #7bdcff;
+  --shadow: 0 16px 36px rgba(0,0,0,.25);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  min-height: 100%;
+  font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--ink);
+  background: url('./images/kidsgame.jpg') no-repeat center center fixed;
+  background-size: cover;
+  overflow-x: hidden;
+}
+
+/* ===== NAVIGATION ===== */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(8, 10, 30, 0.76);
+  backdrop-filter: blur(10px);
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1.5px solid rgba(255,255,255,0.10);
+  box-shadow: 0 2px 12px rgba(0,0,0,.10);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  color: var(--sunray-dark);
+  letter-spacing: 1.5px;
+}
+.brand img {
+  height: 44px;
+  filter: drop-shadow(0 2px 0 rgba(0,0,0,.3));
+}
+.menu {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.menu a {
+  padding: 9px 14px;
+  text-decoration: none;
+  font-weight: 800;
+  color: var(--ink);
+  border-radius: 12px;
+  transition: background 0.25s, color 0.25s;
+  font-size: 1.02rem;
+}
+.menu a:hover, .menu a.cta {
+  background: linear-gradient(135deg, #ffb30077, #ffd93d99);
+  color: #191a22 !important;
+}
+.cta {
+  font-weight: 900;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px #ffe06633;
+  margin-left: 7px;
+}
+
+/* ===== HERO TITLE ===== */
+main {
+  max-width: 1100px;
+  margin: 36px auto 80px;
+  padding: 0 16px;
+  position: relative;
+  z-index: 1;
+}
+h1, .kids-zone-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(2.3rem, 1.2rem + 3vw, 3.5rem);
+  margin: 22px 0 14px;
+  background: linear-gradient(270deg, #ff9800, #ffb300, #ffe066, #ff9800);
+  background-size: 400% 400%;
+  animation: gradientMove 3s ease-in-out infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 3px 0 rgba(0,0,0,0.28));
+  letter-spacing: 1.5px;
+}
+@keyframes gradientMove {
+  0% { background-position: 0% 50%;}
+  50% { background-position: 100% 50%;}
+  100% { background-position: 0% 50%;}
+}
+.subtitle {
+  font-family: 'Fredoka One', cursive;
+  color: #ff9800;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+  margin-bottom: 32px;
+  text-shadow:
+    0 2px 8px #ffe06677,
+    0 1px 0 rgba(0,0,0,0.18);
+  background: linear-gradient(90deg, #ff9800 30%, #ffe066 80%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Makes the text multi-shaded like sunlight! */
+}
+
+
+/* ===== GAME ZONE GRID ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 28px;
+  margin-top: 32px;
+}
+
+/* ===== GAME CARDS ===== */
+.card {
+  display: block;
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  height: 230px;
+  text-decoration: none;
+  color: #fff;
+  background: #222;
+  transition: transform 0.22s, box-shadow 0.22s, filter 0.22s;
+  cursor: pointer;
+  outline: none;
+}
+.card:focus {
+  box-shadow: 0 0 0 3px var(--ring), var(--shadow);
+}
+
+/* Wiggle animation on hover for fun effect */
+.card:hover {
+  animation: wiggle 0.35s;
+  filter: brightness(1.08);
+  box-shadow: 0 0 28px #ffb30055;
+  z-index: 2;
+}
+@keyframes wiggle {
+  0% { transform: rotate(-1.5deg) scale(1.04);}
+  40% { transform: rotate(2deg) scale(1.07);}
+  100% { transform: rotate(0deg) scale(1.04);}
+}
+.card.clicked {
+  animation: bounce 0.4s ease;
+}
+@keyframes bounce {
+  0% { transform: scale(1);}
+  50%{ transform: scale(0.96);}
+  100%{ transform: scale(1);}
+}
+
+/* Soft pastel overlay for readability */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,rgba(255,255,255,0.09) 0 70%,rgba(0,0,0,0.22) 100%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Card Label: Big emoji + text, glowing sun-ray effect */
+.card::after {
+  content: attr(data-title);
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 18px 10px 14px 10px;
+  background: rgba(0,0,0,0.44);
+  font-family: 'Fredoka One', cursive;
+  font-weight: 900;
+  font-size: 1.35rem;
+  line-height: 1.2;
+  text-align: center;
+  letter-spacing: 1.5px;
+  z-index: 1;
+  color: #fff6ec;
+  text-shadow:
+    0 2px 10px #ffb30088,
+    0 2px 4px rgba(0,0,0,0.58),
+    0 0 16px #ffe06666;
+  border-bottom-left-radius: 22px;
+  border-bottom-right-radius: 22px;
+  pointer-events: none;
+}
+.card.grammar::after { content: attr(aria-label); } /* fallback for label if no data-title */
+
+/* Card Backgrounds */
+.card.phonics {
+  background: url('./images/phonicszone.jpg') center/cover no-repeat;
+}
+.card.grammar {
+  background: url('./images/grammarzone.jpg') center/cover no-repeat;
+}
+.card.speaking {
+  background: url('./images/speakingzone.jpg') center/cover no-repeat;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 800px) {
+  main { max-width: 99vw; padding: 0 8px;}
+  .grid { gap: 16px; }
+  h1, .kids-zone-title { font-size: 2rem; }
+}
+
+@media (max-width: 520px) {
+  .nav { padding: 7px 6px; }
+  .brand img { height: 34px; }
+  h1, .kids-zone-title { font-size: 1.15rem; }
+  .card { height: 150px; }
+  .card::after { font-size: 1rem; padding: 10px 4px 7px 4px;}
+}
+
+/* ===== ACCESSIBILITY ===== */
+:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
