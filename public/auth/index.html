@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Sign in — Tiny Steps</title>
+
+  <!-- Favicon & Fonts -->
+  <link rel="icon" href="/assets/images/logo.png" type="image/png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <!-- Preload for snappier auth -->
+  <link rel="modulepreload" href="/auth/firebase.js">
+  <link rel="modulepreload" href="/auth/utils.js">
+
+  <style>
+    :root { --ink:#101321; --bg:#f7f9ff; --card:#fff; --muted:#667; --accent:#0ea5e9; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#edf2ff,#f8fbff);
+      color: var(--ink);
+      min-height: 100vh; display: grid; place-items: center; padding: 24px;
+    }
+    .card {
+      width: min(92vw, 560px); background: var(--card); border-radius: 16px; padding: 22px 20px;
+      box-shadow: 0 14px 40px rgba(10,20,60,.12), 0 2px 0 rgba(255,255,255,.8) inset;
+      border: 1px solid #eef2ff;
+    }
+    .brand { display:flex; align-items:center; gap:10px; margin-bottom: 8px; }
+    .brand img { width:40px; height:40px; }
+    h1 { font-size: clamp(22px,4vw,28px); margin: 0 0 6px; }
+    p { color: var(--muted); margin: 6px 0 16px; }
+    button, input { font: inherit; }
+    .btn {
+      width: 100%; border: 0; border-radius: 12px; padding: 12px 14px; cursor: pointer; font-weight: 800;
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      background: linear-gradient(135deg,#ffd93d,#ff6a88); color:#111; box-shadow: 0 10px 22px rgba(0,0,0,.12);
+    }
+    .btn[disabled] { opacity:.6; cursor: not-allowed; }
+    .btn-google { background:#fff; border:1px solid #e6e9f5; }
+    .btn-google svg { width:18px; height:18px }
+    .row { display:grid; gap:10px; margin: 12px 0; }
+    .row input { padding: 12px 12px; border-radius: 10px; border:1px solid #e6e9f5; }
+    .muted { color:var(--muted); font-size: 14px; text-align:center; }
+    .divider { display:flex; align-items:center; gap:10px; margin: 12px 0; color:#778; }
+    .divider::before, .divider::after { content:""; flex:1; height:1px; background:#eef2ff; }
+    .link { color: var(--accent); text-decoration: none; font-weight: 700; }
+    #userBox { display:none; background:#f8fbff; border:1px dashed #cbd5ff; padding:12px; border-radius:12px; }
+    #error { color:#b00020; font-weight:700; min-height:20px; margin-top:6px; text-align:center; }
+    .visually-hidden { position:absolute !important; height:1px; width:1px; overflow:hidden; clip:rect(1px,1px,1px,1px); white-space:nowrap; }
+  </style>
+
+  <!-- Firebase bootstrap (defines window.fb & dispatches fb-ready) -->
+  <script type="module" src="/auth/firebase.js"></script>
+</head>
+<body>
+  <noscript>
+    <p class="muted">JavaScript is required to sign in.</p>
+  </noscript>
+
+  <div class="card" role="dialog" aria-label="Sign in">
+    <div class="brand">
+      <img src="/assets/images/logo.png" alt="Tiny Steps Logo">
+      <h1>Sign in to Tiny Steps</h1>
+    </div>
+
+    <p>Use Google or your email to continue.</p>
+
+    <!-- Google Sign-in -->
+    <button id="btnGoogle" class="btn btn-google" type="button" aria-label="Sign in with Google">
+      <svg viewBox="0 0 533.5 544.3" aria-hidden="true" focusable="false">
+        <path fill="#4285f4" d="M533.5 278.4c0-18.6-1.7-37-5.2-54.8H272.1v103.8h147c-6.3 34-25.6 62.6-54.4 81.8v67h87.9c51.3-47.3 80.9-117 80.9-197.8z"/>
+        <path fill="#34a853" d="M272.1 544.3c73.4 0 135.1-24.3 180.1-66.1l-87.9-67c-24.4 16.4-55.7 26-92.2 26-70.8 0-130.7-47.7-152.1-111.6H29.7v69.9c44.4 87.8 135.7 148.8 242.4 148.8z"/>
+        <path fill="#fbbc04" d="M120 325.6c-10.7-31.9-10.7-66.2 0-98.1V157.6H29.7c-39.6 78.9-39.6 172.5 0 251.4L120 325.6z"/>
+        <path fill="#ea4335" d="M272.1 107.6c39.8-.6 78 14.7 106.9 42.7l80-80C404.6 25.2 340.7 0 272.1 0 165.4 0 74.1 61.1 29.7 148.8l90.3 69.9C141.4 155 201.3 107.6 272.1 107.6z"/>
+      </svg>
+      Continue with Google
+    </button>
+
+    <div class="divider">or</div>
+
+    <!-- Email form -->
+    <form id="emailForm" autocomplete="on">
+      <div class="row">
+        <label for="email" class="visually-hidden">Email</label>
+        <input id="email" type="email" placeholder="Email" required autocomplete="username" inputmode="email">
+        <label for="pwd" class="visually-hidden">Password</label>
+        <input id="pwd" type="password" placeholder="Password" minlength="6" required autocomplete="current-password">
+      </div>
+      <button class="btn" type="submit">Continue with Email</button>
+    </form>
+
+    <div id="error" role="alert" aria-live="polite"></div>
+
+    <!-- Post-sign-in UI -->
+    <div id="userBox" class="row" aria-live="polite">
+      <div class="muted">Signed in as <b id="who"></b></div>
+      <button id="goBtn" class="btn" type="button">Go to dashboard</button>
+      <button id="signOut" class="btn btn-google" type="button">Sign out</button>
+    </div>
+
+    <p class="muted">Having trouble? <a class="link" href="/">Back to home</a></p>
+  </div>
+
+  <!-- Auth logic via utils -->
+  <script type="module">
+    import {
+      waitForFb,
+      waitForAuthState,
+      completeRedirectIfNeeded,
+      getRedirectTarget,
+      signInWithGoogleSmart,
+      signOutAndRedirect,
+      getRole,
+    } from "/auth/utils.js";
+
+    // DOM refs
+    const $ = (s)=>document.querySelector(s);
+    const btnGoogle = $('#btnGoogle');
+    const emailForm = $('#emailForm');
+    const errorEl  = $('#error');
+    const userBox  = $('#userBox');
+    const who      = $('#who');
+    const goBtn    = $('#goBtn');
+    const btnOut   = $('#signOut');
+
+    // Figure landing (role-aware) unless ?redirect= forces a target
+    function landingForRole(role) {
+      switch (role) {
+        case "admin":   return "/admin/billing.html";
+        case "teacher": return "/teachers/";
+        default:        return "/parents/";
+      }
+    }
+
+    const fb = await waitForFb();
+    const { auth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } = fb;
+
+    // If we just returned from Google redirect, finish it (and it will navigate if needed)
+    await completeRedirectIfNeeded();
+
+    // Decide default landing; allow explicit redirect to win
+    const fallbackLanding = landingForRole("parent"); // before we know role
+    const redirectTargetQS = getRedirectTarget(fallbackLanding);
+
+    let _navigated = false;
+    const safeReplace = (url) => { if (_navigated) return; _navigated = true; setTimeout(()=>location.replace(url), 120); };
+
+    // After any sign-in, compute role and land
+    async function goToDashboard() {
+      await waitForAuthState(auth);
+      const user = auth.currentUser;
+      if (!user) return;
+      const role = await getRole(auth);
+      // If a redirect param exists, prefer it; else role-based landing
+      const target = new URLSearchParams(location.search).has("redirect")
+        ? redirectTargetQS
+        : landingForRole(role || "parent");
+      safeReplace(target);
+    }
+
+    // Google sign-in (smart: redirect→popup fallback inside helper)
+    btnGoogle?.addEventListener('click', async () => {
+      if (errorEl) errorEl.textContent = '';
+      btnGoogle.disabled = true;
+      try {
+        sessionStorage.setItem('postAuthRedirect', redirectTargetQS);
+        await signInWithGoogleSmart(true); // prompt select_account
+        // on return, completeRedirectIfNeeded() above will handle navigation
+      } catch (e) {
+        btnGoogle.disabled = false;
+        console.error('[auth] Google sign-in error:', e);
+        if (errorEl) errorEl.textContent = e?.message || 'Sign-in failed';
+      }
+    });
+
+    // Email + password (sign-in or create)
+    emailForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (errorEl) errorEl.textContent = '';
+      const btn = emailForm.querySelector('button[type="submit"]');
+      btn.disabled = true;
+
+      const email = $('#email').value.trim();
+      const pwd   = $('#pwd').value.trim();
+
+      try {
+        try {
+          await signInWithEmailAndPassword(auth, email, pwd);
+        } catch (err) {
+          if (String(err.code).includes('user-not-found')) {
+            await createUserWithEmailAndPassword(auth, email, pwd);
+          } else {
+            throw err;
+          }
+        }
+        // role-based landing
+        await goToDashboard();
+      } catch (e2) {
+        console.error('[auth] email auth error:', e2);
+        if (errorEl) errorEl.textContent = e2?.message || 'Email sign-in failed';
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    // Signed-in UI (shows account + manual go/sign out)
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        who.textContent = user.displayName || user.email || 'Account';
+        userBox.style.display = 'grid';
+      } else {
+        userBox.style.display = 'none';
+        btnGoogle.disabled = false; // user may have cancelled Google
+      }
+    });
+
+    goBtn?.addEventListener('click', goToDashboard);
+    btnOut?.addEventListener('click', async ()=> {
+      await signOutAndRedirect('/auth/index.html' + (redirectTargetQS ? `?redirect=${encodeURIComponent(redirectTargetQS)}` : ''));
+    });
+  </script>
+</body>
+</html>
